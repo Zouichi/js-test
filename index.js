@@ -91,17 +91,17 @@ particle.login({
         devicesPr.then(
             function(devices) {
                 console.log('Devices: ', devices);
-                // devices = JSON.parse(devices);
                 console.log(devices.body);
+                io.sockets.emit('monsocket2', JSON.stringify(devices.body));
                 devices.body.forEach(function(device){
-                	var toSave = new Devices(device);
+                    var toSave = new Devices(device);
 
-                	toSave.save(function(err, success){
-                		if(err){
-                			console.log(err);
-                		}
-                		else{
-                			console.log('device saved');
+                    toSave.save(function(err, success){
+                        if(err){
+                            console.log(err);
+                        }
+                        else{
+                            console.log('device saved');
                         }
                     })
                 });
