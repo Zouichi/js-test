@@ -8,10 +8,18 @@ var resistorRead = require('./models/resistorRead.js');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
+var Twitter = require('twitter');
 
 
 var particle = new Particle();
 var token;
+
+var client = new Twitter({
+  consumer_key: 'BnCnYT8WwUzbJBVFIOEuw96Wa',
+  consumer_secret: 'MohDuyxuqKy0URCHfZIyuyHJgna1n19XlT1jpRsuCwcFKEXOjQ',
+  access_token_key: '905686238056906752-eMMp715HVOOS4j2LbDmrwOrNoEoWfrE',
+  access_token_secret: 'rJpDcvgVFcGliMllRa2iMQ4zoMbDRAnHVmysPr4GpKL0i'
+});
 
 // j'instancie la connexion mongo 
 var promise = mongoose.connect('mongodb://localhost:27017/ifaObj', {
@@ -23,10 +31,9 @@ promise.then(
         console.log('db.connected');
         // je démarre mon serveur node sur le port 3000
         server.listen(3000, function() {
-            console.log('Example app listening on port 3000!')
+            console.log('App listening on port 3000!')
     		io.sockets.on('connection', function (socket) {
 	    	console.log("un client est connecté");
-	    	socket.emit('monsocket2', { hello: "world" });
 			});
         });
     },
@@ -51,14 +58,23 @@ app.get('/', function(req, res) {
 });
 app.get('/events-stream.html', function(req, res) {
     res.sendFile(__dirname + '/client/events-stream.html')
-});app.get('/users.html', function(req, res) {
+});
+app.get('/users.html', function(req, res) {
     res.sendFile(__dirname + '/client/users.html')
+});
+app.get('/devices.html', function(req, res) {
+    res.sendFile(__dirname + '/client/devices.html')
+});
+app.get('/tweet-stream.html', function(req, res) {
+    res.sendFile(__dirname + '/client/tweet-stream.html')
+});
+app.get('/tweet-light.html', function(req, res) {
+    res.sendFile(__dirname + '/client/tweet-light.html')
 });
 app.post('/particle', function(req, res) {
     console.log("une requete est arrivée");
     console.log(req);
 });
-
 
 
 particle.login({
@@ -79,7 +95,6 @@ particle.login({
                 console.log(devices.body);
                 devices.body.forEach(function(device){
                 	var toSave = new Devices(device);
-                	
 
                 	toSave.save(function(err, success){
                 		if(err){
@@ -87,8 +102,8 @@ particle.login({
                 		}
                 		else{
                 			console.log('device saved');
-                		}
-                	})
+                        }
+                    })
                 });
             },
             function(err) {
@@ -106,20 +121,19 @@ particle.login({
             });
         });
 
-
-        // Lecture de la photorésistance
-        // particle.getEventStream({
-        //     deviceId: '4e002d000751353530373132',
-        //     auth: token
-
-        // }).then(function(stream2) {
-        //     stream.on('event2', function(data) {
-        //         console.log("Event 2: " + JSON.strigify(data));
-        //         io.sockets.emit('monsocket3', JSON.strigify(data));
-        //     })
-        // });
     },
     function(err) {
         console.log('Could not log in.', err);
     }
 );
+
+// Twitter stream
+client.stream('statuses/filter', {track: 'javascript'}, function(stream) {
+  stream.on('data', function(event) {
+    console.log(event && event.text);
+    io.sockets.emit('newTwit', event);
+  }); 
+  stream.on('error', function(error) {
+    throw error;
+  });
+});

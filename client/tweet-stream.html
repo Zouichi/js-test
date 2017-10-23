@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8">
+	<title>Tweet stream</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+</head>
+<body>
+	<h1>Tweet stream</h1>
+	<button><a href="/">Index</a></button>
+	<button><a href="devices.html">Devices</a></button>
+    <button><a href="users.html">Users</a></button>
+    <button><a href="events-stream.html">Events stream</a></button>
+    <button><a href="tweet-light.html">Tweet light</a></button>
+    <ul id="liste"></ul>
+</body>
+
+<script type="text/javascript">
+var twitter = io.connect('http://localhost:3000');
+twitter.on("newTwit", function(twitter) {
+	console.log(twitter);
+    var ul = document.getElementById("liste");
+    var li = document.createElement('li');
+    li.innerHTML = "Posté le : " + twitter.created_at + "<br>" + "Par : " + twitter.user.name + "<br>" + "Tweet : " + twitter.text;
+    ul.appendChild(li);
+});
+</script>
+
+</html>

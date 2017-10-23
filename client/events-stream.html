@@ -11,18 +11,15 @@
 
 <body>
     <h1>Events stream</h1>
+    <button><a href="/">Index</a></button>
+    <button><a href="devices.html">Devices</a></button>
+    <button><a href="users.html">Users</a></button>
+    <button><a href="tweet-stream.html">Tweet stream</a></button>
+    <button><a href="tweet-light.html">Tweet light</a></button>
     <div class="col-md-6"><canvas id="myChart" width="800" height="450"></canvas></div>
     <div class="col-md-6"><ul id="liste"></ul></div>
-    <button><a href="/">Index</a></button>
-    <button><a href="users.html">Users</a></button>
 </body>
 <script type="text/javascript">
-// var socket = io.connect('http://localhost:3000');
-// socket.on("monsocket",function(socket){
-// console.log(socket);
-// console.log(JSON.parse(socket));
-// document.write('<li>' + socket + '</li>');
-// });
 
 var tableX = [];
 var tableY = [];
@@ -30,7 +27,7 @@ var tableY = [];
 var socket = io.connect('http://localhost:3000');
 socket.on("monsocket", function(socket) {
     console.log(socket);
-    var ul =  document.getElementById("liste");
+    var ul = document.getElementById("liste");
     var li = document.createElement('li');
     li.innerHTML = socket;
     ul.appendChild(li);
