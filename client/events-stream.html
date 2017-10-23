@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <title>Events stream</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+</head>
+
+<body>
+    <h1>Events stream</h1>
+    <div class="col-md-6"><canvas id="myChart" width="800" height="450"></canvas></div>
+    <div class="col-md-6"><ul id="liste"></ul></div>
+    <button><a href="/">Index</a></button>
+    <button><a href="users.html">Users</a></button>
+</body>
+<script type="text/javascript">
+// var socket = io.connect('http://localhost:3000');
+// socket.on("monsocket",function(socket){
+// console.log(socket);
+// console.log(JSON.parse(socket));
+// document.write('<li>' + socket + '</li>');
+// });
+
+var tableX = [];
+var tableY = [];
+
+var socket = io.connect('http://localhost:3000');
+socket.on("monsocket", function(socket) {
+    console.log(socket);
+    var ul =  document.getElementById("liste");
+    var li = document.createElement('li');
+    li.innerHTML = socket;
+    ul.appendChild(li);
+
+tableY.push(JSON.parse(socket).data);
+tableX.push(JSON.parse(socket).published_at);
+
+// Chart.js
+    var ctx = document.getElementById("myChart").getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: tableX,
+            datasets: [{
+                label: 'Valeurs de la photoresistance',
+                data: tableY,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+});
+    });
+</script>
+
+</html>

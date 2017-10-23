@@ -1,0 +1,36 @@
+<!-- https://build.particle.io/build/59b935c98a1f00b62400102b -->
+<!-- Example docs : https://docs.particle.io/guide/getting-started/examples/photon/ -->
+
+<!DOCTYPE>
+<html>
+  <head>
+    <title>Allumer / éteindre la diode</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+  </head>
+  <body>
+  <center>
+  <ul id="monsocket"></ul>
+  <br>
+  <br>
+  <br>
+  <form action="https://api.particle.io/v1/devices/4e002d000751353530373132/led?access_token=2477f819122a24337b703316ad0356b0b5ddeafc" method="POST">
+    Allumer / éteindre la diode<br>
+    <br>
+    <input type="radio" name="args" value="on">Allumer la diode.
+    <br>
+    <input type="radio" name="args" value="off">Eteindre la diode.
+    <br>
+    <br>
+    <input type="submit" value="Go !">
+    <br>
+    <br>
+    <br>
+    <br>
+    <button><a href="events-stream.html">Events stream</a></button>
+    <button><a href="users.html">Users</a></button>
+  </form>
+  </center>
+  </body>
+</html>
