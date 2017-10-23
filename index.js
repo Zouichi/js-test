@@ -1,3 +1,5 @@
+// Repo : https://github.com/Zouichi/js-test
+
 var Particle = require('particle-api-js');
 const express = require('express');
 var bodyParser = require('body-parser');
@@ -90,9 +92,9 @@ particle.login({
         });
         devicesPr.then(
             function(devices) {
-                console.log('Devices: ', devices);
-                console.log(devices.body);
-                io.sockets.emit('monsocket2', JSON.stringify(devices.body));
+                console.log('Devices: ', devices.body);
+                io.sockets.emit('monsocket2', JSON.stringify(devices));
+                // console.log(monsocket2);
                 devices.body.forEach(function(device){
                     var toSave = new Devices(device);
 
@@ -130,7 +132,7 @@ particle.login({
 // Twitter stream
 client.stream('statuses/filter', {track: 'javascript'}, function(stream) {
   stream.on('data', function(event) {
-    console.log(event && event.text);
+    // console.log(event && event.text);
     io.sockets.emit('newTwit', event);
   }); 
   stream.on('error', function(error) {
